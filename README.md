@@ -14,7 +14,8 @@ This is an application that visually displays how different sorting algorithms w
 * Recommended IDE: IntelliJ IDEA
 
 ## File Information
-* InputPane.java: GUI used for input and user interactions
+* InputPaneTop.java: GUI used for input and user interactions (on top)
+* InputPaneBottom.java: GUI used for input and user interactions (on bottom)
 * Element.java: object to be sorted
 * Sort.java: contains sorting algorithms
 * AlgorithmPane: pane used to visually demonstrate sorting algorithm

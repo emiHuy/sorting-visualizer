@@ -12,7 +12,7 @@ public class Element implements Comparable{
         rect = new Rectangle();
         rect.setWidth(width);
         rect.setHeight(value);
-        rect.setFill(Color.GREEN);
+        rect.setFill(Color.rgb(2,170,2));
         rect.setStroke(Color.BLACK);
     }
 

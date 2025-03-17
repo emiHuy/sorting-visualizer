@@ -17,7 +17,7 @@ public class SortingVisualizerApp extends Application {
 
     public SortingVisualizerApp() {
         view = new SortingVisualizerView();
-        sort = new Sort(view.getAlgorithmPane(), view.getInputPane());
+        sort = new Sort(view);
         elements = Element.generateNElements(50);
     }
 
@@ -27,19 +27,24 @@ public class SortingVisualizerApp extends Application {
         mainPane.getChildren().add(view);
         view.getAlgorithmPane().display(elements);
 
-        view.getInputPane().getGenerateListButton().setOnAction(new EventHandler<ActionEvent>() {
+        view.getInputPaneTop().getGenerateListButton().setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                elements = Element.generateNElements(Integer.parseInt(""+view.getInputPane().getSizeChoiceBox().getValue()));
+                elements = Element.generateNElements(Integer.parseInt(""+view.getInputPaneTop().getSizeChoiceBox().getValue()));
                 view.getAlgorithmPane().display(elements);
             }
         });
 
-        view.getInputPane().getSortButton().setOnAction(new EventHandler<ActionEvent>() {
+        view.getInputPaneTop().getSortButton().setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                String sortType = ""+view.getInputPane().getSortChoiceBox().getValue();
+                String sortType = ""+view.getInputPaneTop().getSortChoiceBox().getValue();
                 Element[] elementsCopy = Arrays.copyOf(elements, elements.length);
+                view.getInputPaneTop().disable();
+                view.getInputPaneBottom().buttonVisibility(true);
+                view.getInputPaneBottom().getPlayButton().setDisable(true);
+                sort.setDelay(view.getInputPaneBottom().getSpeedSlider().getValue());
+                view.getInputPaneBottom().getSpeedSlider().setDisable(true);
 
                 switch (sortType) {
                     case "Selection Sort":
@@ -51,6 +56,36 @@ public class SortingVisualizerApp extends Application {
                     case "Insertion Sort":
                         sort.insertionSort(elementsCopy);
                 }
+            }
+        });
+
+        view.getInputPaneTop().getSortChoiceBox().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                view.getAlgorithmPane().display(elements);
+            }
+        });
+
+        view.getInputPaneBottom().getPauseButton().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                sort.pause();
+                view.getInputPaneBottom().getPlayButton().setDisable(false);
+            }
+        });
+
+        view.getInputPaneBottom().getStopButton().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                sort.stop();
+                view.getAlgorithmPane().display(elements);
+            }
+        });
+
+        view.getInputPaneBottom().getPlayButton().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                sort.play();
             }
         });
 

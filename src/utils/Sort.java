@@ -1,27 +1,29 @@
 package utils;
 
+import controllers.InputPaneBottom;
 import controllers.InputPaneTop;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import models.Element;
 import views.AlgorithmPane;
+import views.SortingVisualizerView;
+
+import java.util.TreeMap;
 
 public class Sort {
-    AlgorithmPane algorithmPane;
-    InputPaneTop inputPaneTop;
-    static double delay = 0.1;
+    SortingVisualizerView view;
+    private Timeline timeline;
+    private double delay = 0.08;
 
-    public Sort(AlgorithmPane algorithmPane, InputPaneTop inputPaneTop){
-        this.algorithmPane = algorithmPane;
-        this.inputPaneTop = inputPaneTop;
+    public Sort(SortingVisualizerView view){
+        this.view = view;
+        timeline = new Timeline();
     }
 
     public void selectionSort(Element[] arr) {
-        inputPaneTop.disable();
         int nextSmallestIndex;
         Element temp;
-        Timeline timeline = new Timeline(); // Create a timeline to manage animations
         for (int i = 0; i < arr.length - 1; i++) {
             nextSmallestIndex = i;
             for (int j = i + 1; j < arr.length; j++) {
@@ -34,26 +36,20 @@ public class Sort {
             arr[i] = arr[nextSmallestIndex];
             arr[nextSmallestIndex] = temp;
 
-            // Add a KeyFrame to display the current state of the array
-            Element[] currentState = arr.clone(); // Clone the array to capture its current state
-            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(i * delay), event -> {
-                algorithmPane.display(currentState); // Display the array at this state
-            }));
+            makeKeyFrame(arr.clone(), i*delay);
         }
 
         // Play the timeline
         timeline.setCycleCount(1);
-        executeAfterTimeline(timeline, arr);
+        executeAfterTimeline(arr);
         timeline.play();
     }
 
     public void bubbleSort(Element[] arr) {
-        inputPaneTop.disable();
         int n = arr.length;
         boolean swapped;
         double delayTime = 0;
         Element temp;
-        Timeline timeline = new Timeline();
         for (int i = 0; i < n; i++) {
             swapped = false;
             for (int j = 0; j < n-i-1; j++) {
@@ -63,10 +59,7 @@ public class Sort {
                     arr[j] = arr[j+1];
                     arr[j+1] = temp;
                     // Add a KeyFrame to display the current state of the array
-                    Element[] currentState = arr.clone(); // Clone the array to capture its current state
-                    timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(delayTime), event -> {
-                        algorithmPane.display(currentState); // Display the array at this state
-                    }));
+                    makeKeyFrame(arr.clone(), delayTime);
                     swapped = true;
                 }
             }
@@ -75,13 +68,11 @@ public class Sort {
             }
         }
         timeline.setCycleCount(1);
-        executeAfterTimeline(timeline, arr);
+        executeAfterTimeline(arr);
         timeline.play();
     }
 
     public void insertionSort(Element[] arr) {
-        inputPaneTop.disable();
-        Timeline timeline = new Timeline();
         int n = arr.length;
         Element key;
         Element temp;
@@ -96,25 +87,47 @@ public class Sort {
                 arr[j + 1] = arr[j];
                 arr[j] = temp;
                 j--;
-                Element[] currentState = arr.clone(); // Clone the array to capture its current state
-                timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(delayTime), event -> {
-                    algorithmPane.display(currentState); // Display the array at this state
-                }));
+                makeKeyFrame(arr.clone(), delayTime);
             }
             arr[j + 1] = key;
         }
         timeline.setCycleCount(1);
-        executeAfterTimeline(timeline, arr);
+        executeAfterTimeline(arr);
         timeline.play();
     }
 
-    private void executeAfterTimeline(Timeline timeline, Element[] arr) {
+    private void executeAfterTimeline(Element[] arr) {
         timeline.setOnFinished(event -> {
-            inputPaneTop.enable();
+            view.resetAfterExecution();
             for (Element e: arr) {
                 System.out.println(e.getValue());
             }
+            timeline = new Timeline();
             System.out.println();
         });
+    }
+
+    private void makeKeyFrame(Element[] arr, double delayTime){
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(delayTime), event -> {
+            view.update(arr);
+        }));
+    }
+
+    public void pause(){
+        timeline.pause();
+    }
+
+    public void play(){
+        timeline.play();
+    }
+
+    public void stop() {
+        timeline.stop();
+        timeline = new Timeline();
+        view.resetAfterExecution();
+    }
+
+    public void setDelay(double newDelay) {
+        delay = newDelay;
     }
 }
