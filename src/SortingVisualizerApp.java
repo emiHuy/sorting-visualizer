@@ -17,7 +17,7 @@ public class SortingVisualizerApp extends Application {
 
     public SortingVisualizerApp() {
         view = new SortingVisualizerView();
-        sort = new Sort(view.getAlgorithmPane());
+        sort = new Sort(view.getAlgorithmPane(), view.getInputPane());
         elements = Element.generateNElements(50);
     }
 

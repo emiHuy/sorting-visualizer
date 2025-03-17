@@ -1,21 +1,24 @@
 package utils;
 
+import controllers.InputPaneTop;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.util.Duration;
 import models.Element;
 import views.AlgorithmPane;
 
 public class Sort {
     AlgorithmPane algorithmPane;
+    InputPaneTop inputPaneTop;
     static double delay = 0.1;
 
-    public Sort(AlgorithmPane algorithmPane){
+    public Sort(AlgorithmPane algorithmPane, InputPaneTop inputPaneTop){
         this.algorithmPane = algorithmPane;
+        this.inputPaneTop = inputPaneTop;
     }
 
     public void selectionSort(Element[] arr) {
+        inputPaneTop.disable();
         int nextSmallestIndex;
         Element temp;
         Timeline timeline = new Timeline(); // Create a timeline to manage animations
@@ -40,10 +43,12 @@ public class Sort {
 
         // Play the timeline
         timeline.setCycleCount(1);
+        executeAfterTimeline(timeline, arr);
         timeline.play();
     }
 
     public void bubbleSort(Element[] arr) {
+        inputPaneTop.disable();
         int n = arr.length;
         boolean swapped;
         double delayTime = 0;
@@ -70,10 +75,12 @@ public class Sort {
             }
         }
         timeline.setCycleCount(1);
+        executeAfterTimeline(timeline, arr);
         timeline.play();
     }
 
     public void insertionSort(Element[] arr) {
+        inputPaneTop.disable();
         Timeline timeline = new Timeline();
         int n = arr.length;
         Element key;
@@ -97,6 +104,17 @@ public class Sort {
             arr[j + 1] = key;
         }
         timeline.setCycleCount(1);
+        executeAfterTimeline(timeline, arr);
         timeline.play();
+    }
+
+    private void executeAfterTimeline(Timeline timeline, Element[] arr) {
+        timeline.setOnFinished(event -> {
+            inputPaneTop.enable();
+            for (Element e: arr) {
+                System.out.println(e.getValue());
+            }
+            System.out.println();
+        });
     }
 }

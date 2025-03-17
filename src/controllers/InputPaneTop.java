@@ -1,23 +1,18 @@
 package controllers;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import models.Element;
 
-import java.util.Arrays;
-
-public class InputPane extends Pane {
+public class InputPaneTop extends Pane {
     ChoiceBox sortChoiceBox;
     Button sortButton;
     Button generateListButton;
     ChoiceBox sizeChoiceBox;
 
-    public InputPane(){
+    public InputPaneTop(){
         Label sortLabel = new Label("Sorting Algorithm: ");
         sortLabel.relocate(410, 0);
         sortLabel.setPrefSize(140, 35);
@@ -70,4 +65,21 @@ public class InputPane extends Pane {
     public ChoiceBox getSizeChoiceBox() {
         return sizeChoiceBox;
     }
+
+    public void disable() {
+        sortChoiceBox.setDisable(true);
+        sizeChoiceBox.setDisable(true);
+        sortButton.setDisable(true);
+        sizeChoiceBox.setDisable(true);
+        generateListButton.setDisable(true);
+    }
+
+    public void enable(){
+        sortChoiceBox.setDisable(false);
+        sizeChoiceBox.setDisable(false);
+        sortButton.setDisable(false);
+        sizeChoiceBox.setDisable(false);
+        generateListButton.setDisable(false);
+    }
+
 }
