@@ -1,11 +1,11 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import models.Element;
-import utils.Sort;
+import models.Sort;
 import views.SortingVisualizerView;
 
 import java.util.Arrays;
@@ -25,74 +25,67 @@ public class SortingVisualizerApp extends Application {
         Pane mainPane = new Pane();
         mainPane.setStyle("-fx-background-color: rgb(240, 240, 240);");
         mainPane.getChildren().add(view);
-        view.getAlgorithmPane().display(elements);
+        view.updateVisualizer(elements);
 
-        view.getInputPaneTop().getGenerateListButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                elements = Element.generateNElements(Integer.parseInt(""+view.getInputPaneTop().getSizeChoiceBox().getValue()));
-                view.getAlgorithmPane().display(elements);
-            }
-        });
+        view.getInputPaneTop().getGenerateListButton().setOnAction(this::handleGenerateListButton);
+        view.getInputPaneTop().getSizeChoiceBox().setOnAction(this::handleSizeChoiceBox);
+        view.getInputPaneTop().getSortChoiceBox().setOnAction(this::handleSortChoiceBox);
+        view.getInputPaneTop().getSortButton().setOnAction(this::handleSortButton);
 
-        view.getInputPaneTop().getSortButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                String sortType = ""+view.getInputPaneTop().getSortChoiceBox().getValue();
-                Element[] elementsCopy = Arrays.copyOf(elements, elements.length);
-                view.getInputPaneTop().disable();
-                view.getInputPaneBottom().buttonVisibility(true);
-                view.getInputPaneBottom().getPlayButton().setDisable(true);
-                sort.setDelay(view.getInputPaneBottom().getSpeedSlider().getValue());
-                view.getInputPaneBottom().getSpeedSlider().setDisable(true);
-
-                switch (sortType) {
-                    case "Selection Sort":
-                         sort.selectionSort(elementsCopy);
-                        break;
-                    case "Bubble Sort":
-                         sort.bubbleSort(elementsCopy);
-                        break;
-                    case "Insertion Sort":
-                        sort.insertionSort(elementsCopy);
-                }
-            }
-        });
-
-        view.getInputPaneTop().getSortChoiceBox().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                view.getAlgorithmPane().display(elements);
-            }
-        });
-
-        view.getInputPaneBottom().getPauseButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                sort.pause();
-                view.getInputPaneBottom().getPlayButton().setDisable(false);
-            }
-        });
-
-        view.getInputPaneBottom().getStopButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                sort.stop();
-                view.getAlgorithmPane().display(elements);
-            }
-        });
-
-        view.getInputPaneBottom().getPlayButton().setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                sort.play();
-            }
-        });
+        view.getInputPaneBottom().getCancelButton().setOnAction(this::handleStopButton);
+        view.getInputPaneBottom().getPauseButton().setOnAction(this::handlePauseButton);
+        view.getInputPaneBottom().getPlayButton().setOnAction(this::handlePlayButton);
 
         primaryStage.setTitle("Sorting Visualizer");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(mainPane, 1024, 700));
         primaryStage.show();
+    }
+
+    public void handleGenerateListButton(ActionEvent actionEvent) {
+        elements = Element.generateNElements(Integer.parseInt(String.valueOf(view.getInputPaneTop().getSizeChoiceBox().getValue())));
+        view.updateVisualizer(elements);
+    }
+
+    public void handleSizeChoiceBox(Event actionEvent) {
+        elements = Element.generateNElements(Integer.parseInt(String.valueOf(view.getInputPaneTop().getSizeChoiceBox().getValue())));
+        view.updateVisualizer(elements);
+    }
+
+    public void handleSortButton(ActionEvent actionEvent) {
+        String sortType = ""+view.getInputPaneTop().getSortChoiceBox().getValue();
+        view.updateInputComponentsForSort();
+        sort.setDelay(view.getInputPaneBottom().getSpeedSlider().getValue());
+
+        switch (sortType) {
+            case "Selection Sort":
+                sort.selectionSort(Arrays.copyOf(elements, elements.length));
+                break;
+            case "Bubble Sort":
+                sort.bubbleSort(Arrays.copyOf(elements, elements.length));
+                break;
+            case "Insertion Sort":
+                sort.insertionSort(Arrays.copyOf(elements, elements.length));
+        }
+    }
+
+    public void handleSortChoiceBox(Event event) {
+        view.updateVisualizer(elements);
+    }
+
+    public void handlePauseButton(ActionEvent actionEvent) {
+        sort.pause();
+        view.getInputPaneBottom().getPlayButton().setDisable(false);
+    }
+
+    public void handlePlayButton(ActionEvent actionEvent) {
+        sort.play();
+        view.getInputPaneBottom().getPlayButton().setDisable(true);
+    }
+
+    public void handleStopButton(ActionEvent actionEvent) {
+        sort.cancel();
+        view.updateVisualizer(elements);
     }
 
     public static void main(String[] args) {

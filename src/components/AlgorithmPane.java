@@ -1,4 +1,4 @@
-package views;
+package components;
 
 import javafx.scene.layout.Pane;
 import models.Element;
@@ -9,7 +9,7 @@ public class AlgorithmPane extends Pane {
         setPrefSize(954, 540);
     }
 
-    public void display(Element[] elements) {
+    public void update(Element[] elements) {
         getChildren().clear();
         int width = 950/elements.length;
         int x = 2 + (475-width*elements.length/2);

@@ -1,7 +1,8 @@
 package views;
 
-import controllers.InputPaneBottom;
-import controllers.InputPaneTop;
+import components.AlgorithmPane;
+import components.InputPaneBottom;
+import components.InputPaneTop;
 import javafx.scene.layout.Pane;
 import models.Element;
 
@@ -22,10 +23,6 @@ public class SortingVisualizerView extends Pane {
         getChildren().addAll(inputPaneTop, algorithmPane, inputPaneBottom);
     }
 
-    public AlgorithmPane getAlgorithmPane() {
-        return algorithmPane;
-    }
-
     public InputPaneTop getInputPaneTop() {
         return inputPaneTop;
     }
@@ -34,13 +31,20 @@ public class SortingVisualizerView extends Pane {
         return inputPaneBottom;
     }
 
-    public void resetAfterExecution() {
+    public void reset() {
         inputPaneTop.enable();
         inputPaneBottom.getSpeedSlider().setDisable(false);
         inputPaneBottom.buttonVisibility(false);
     }
 
-    public void update(Element[] elements) {
-        algorithmPane.display(elements);
+    public void updateVisualizer(Element[] elements) {
+        algorithmPane.update(elements);
+    }
+
+    public void updateInputComponentsForSort() {
+        inputPaneTop.disable();
+        inputPaneBottom.buttonVisibility(true);
+        inputPaneBottom.getPlayButton().setDisable(true);
+        inputPaneBottom.getSpeedSlider().setDisable(true);
     }
 }

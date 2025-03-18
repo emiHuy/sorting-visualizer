@@ -1,4 +1,4 @@
-package controllers;
+package components;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -6,10 +6,10 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 
 public class InputPaneBottom extends Pane {
-    Slider speedSlider;
-    Button stopButton;
-    Button pauseButton;
-    Button playButton;
+    private Slider speedSlider;
+    private Button cancelButton;
+    private Button pauseButton;
+    private Button playButton;
 
     public InputPaneBottom() {
         Label fastLabel = new Label("Fast");
@@ -17,7 +17,7 @@ public class InputPaneBottom extends Pane {
         fastLabel.setPrefSize(35,28);
         fastLabel.setStyle("-fx-font: 15 arial");
 
-        speedSlider = new Slider(0.01,0.1,0.01);
+        speedSlider = new Slider(0.01,0.3,0.01);
         speedSlider.relocate(40,0);
         speedSlider.setPrefSize(100,28);
         speedSlider.setValue(0.08);
@@ -27,10 +27,10 @@ public class InputPaneBottom extends Pane {
         slowLabel.setPrefSize(35,28);
         slowLabel.setStyle("-fx-font: 15 arial");
 
-        stopButton = new Button("Cancel");
-        stopButton.relocate(730,0);
-        stopButton.setPrefSize(70,0);
-        stopButton.setStyle("-fx-font: 15 arial");
+        cancelButton = new Button("Cancel");
+        cancelButton.relocate(730,0);
+        cancelButton.setPrefSize(70,0);
+        cancelButton.setStyle("-fx-font: 15 arial");
 
         pauseButton = new Button("Pause");
         pauseButton.relocate(807,0);
@@ -43,15 +43,15 @@ public class InputPaneBottom extends Pane {
         playButton.setStyle("-fx-font: 15 arial");
 
         buttonVisibility(false);
-        getChildren().addAll(fastLabel, slowLabel,speedSlider, stopButton, pauseButton, playButton);
+        getChildren().addAll(fastLabel, slowLabel,speedSlider, cancelButton, pauseButton, playButton);
     }
 
     public Slider getSpeedSlider() {
         return speedSlider;
     }
 
-    public Button getStopButton() {
-        return stopButton;
+    public Button getCancelButton() {
+        return cancelButton;
     }
 
     public Button getPauseButton() {
@@ -65,6 +65,6 @@ public class InputPaneBottom extends Pane {
     public void buttonVisibility(Boolean v) {
         playButton.setVisible(v);
         pauseButton.setVisible(v);
-        stopButton.setVisible(v);
+        cancelButton.setVisible(v);
     }
 }

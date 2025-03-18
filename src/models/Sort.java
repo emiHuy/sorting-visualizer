@@ -1,24 +1,19 @@
-package utils;
+package models;
 
-import controllers.InputPaneBottom;
-import controllers.InputPaneTop;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import models.Element;
-import views.AlgorithmPane;
 import views.SortingVisualizerView;
-
-import java.util.TreeMap;
 
 public class Sort {
     SortingVisualizerView view;
     private Timeline timeline;
-    private double delay = 0.08;
+    private double delay;
 
     public Sort(SortingVisualizerView view){
         this.view = view;
         timeline = new Timeline();
+        delay = view.getInputPaneBottom().getSpeedSlider().getValue();
     }
 
     public void selectionSort(Element[] arr) {
@@ -98,18 +93,18 @@ public class Sort {
 
     private void executeAfterTimeline(Element[] arr) {
         timeline.setOnFinished(event -> {
-            view.resetAfterExecution();
+            view.reset();
             for (Element e: arr) {
-                System.out.println(e.getValue());
+                System.out.print(e.getValue() + " ");
             }
-            timeline = new Timeline();
             System.out.println();
+            timeline = new Timeline();
         });
     }
 
     private void makeKeyFrame(Element[] arr, double delayTime){
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(delayTime), event -> {
-            view.update(arr);
+            view.updateVisualizer(arr);
         }));
     }
 
@@ -121,10 +116,10 @@ public class Sort {
         timeline.play();
     }
 
-    public void stop() {
+    public void cancel() {
         timeline.stop();
         timeline = new Timeline();
-        view.resetAfterExecution();
+        view.reset();
     }
 
     public void setDelay(double newDelay) {

@@ -1,4 +1,4 @@
-package controllers;
+package components;
 
 import javafx.collections.FXCollections;
 import javafx.scene.layout.Pane;
@@ -7,10 +7,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class InputPaneTop extends Pane {
-    ChoiceBox sortChoiceBox;
-    Button sortButton;
-    Button generateListButton;
-    ChoiceBox sizeChoiceBox;
+    private Button generateListButton;
+    private ChoiceBox sizeChoiceBox;
+    private ChoiceBox sortChoiceBox;
+    private Button sortButton;
 
     public InputPaneTop(){
         Label sortLabel = new Label("Sorting Algorithm: ");
