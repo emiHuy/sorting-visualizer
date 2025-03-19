@@ -2,18 +2,20 @@ package models;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.util.Duration;
-import views.SortingVisualizerView;
 
 public class Sort {
-    SortingVisualizerView view;
+    private final BooleanProperty isTimelineComplete = new SimpleBooleanProperty(false);
+    private final BooleanProperty newKeyFrameCreated = new SimpleBooleanProperty(false);
     private Timeline timeline;
     private double delay;
+    private Element[] keyFrameArr;
 
-    public Sort(SortingVisualizerView view){
-        this.view = view;
+    public Sort(){
         timeline = new Timeline();
-        delay = view.getInputPaneBottom().getSpeedSlider().getValue();
+        delay = 0.08;
     }
 
     public void selectionSort(Element[] arr) {
@@ -93,7 +95,7 @@ public class Sort {
 
     private void executeAfterTimeline(Element[] arr) {
         timeline.setOnFinished(event -> {
-            view.reset();
+            isTimelineComplete.set(true);
             for (Element e: arr) {
                 System.out.print(e.getValue() + " ");
             }
@@ -104,8 +106,15 @@ public class Sort {
 
     private void makeKeyFrame(Element[] arr, double delayTime){
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(delayTime), event -> {
-            view.updateVisualizer(arr);
+            keyFrameArr = arr;
+            setNewKeyFrameCreated(true);
         }));
+    }
+
+    public void cancel() {
+        timeline.stop();
+        timeline = new Timeline();
+        isTimelineComplete.set(true);
     }
 
     public void pause(){
@@ -116,13 +125,27 @@ public class Sort {
         timeline.play();
     }
 
-    public void cancel() {
-        timeline.stop();
-        timeline = new Timeline();
-        view.reset();
-    }
-
     public void setDelay(double newDelay) {
         delay = newDelay;
+    }
+
+    public BooleanProperty isTimelineCompleteProperty() {
+        return isTimelineComplete;
+    }
+
+    public BooleanProperty isNewKeyFrameCreatedProperty() {
+        return newKeyFrameCreated;
+    }
+
+    public Element[] getKeyFrameArr() {
+        return keyFrameArr;
+    }
+
+    public void setTimelineComplete(boolean value) {
+        isTimelineComplete.set(value);
+    }
+
+    public void setNewKeyFrameCreated(boolean value) {
+        newKeyFrameCreated.set(value);
     }
 }

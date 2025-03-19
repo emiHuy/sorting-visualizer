@@ -17,13 +17,13 @@ public class InputPaneBottom extends Pane {
         fastLabel.setPrefSize(35,28);
         fastLabel.setStyle("-fx-font: 15 arial");
 
-        speedSlider = new Slider(0.01,0.3,0.01);
+        speedSlider = new Slider(0.001,0.3,0.01);
         speedSlider.relocate(40,0);
-        speedSlider.setPrefSize(100,28);
+        speedSlider.setPrefSize(150,28);
         speedSlider.setValue(0.08);
 
         Label slowLabel = new Label("Slow");
-        slowLabel.relocate(145,0);
+        slowLabel.relocate(195,0);
         slowLabel.setPrefSize(35,28);
         slowLabel.setStyle("-fx-font: 15 arial");
 

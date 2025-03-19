@@ -17,8 +17,9 @@ public class SortingVisualizerApp extends Application {
 
     public SortingVisualizerApp() {
         view = new SortingVisualizerView();
-        sort = new Sort(view);
+        sort = new Sort();
         elements = Element.generateNElements(50);
+        initializeSignals();
     }
 
     public void start(Stage primaryStage) {
@@ -76,16 +77,34 @@ public class SortingVisualizerApp extends Application {
     public void handlePauseButton(ActionEvent actionEvent) {
         sort.pause();
         view.getInputPaneBottom().getPlayButton().setDisable(false);
+        view.getInputPaneBottom().getPauseButton().setDisable(true);
     }
 
     public void handlePlayButton(ActionEvent actionEvent) {
         sort.play();
         view.getInputPaneBottom().getPlayButton().setDisable(true);
+        view.getInputPaneBottom().getPauseButton().setDisable(false);
     }
 
     public void handleStopButton(ActionEvent actionEvent) {
         sort.cancel();
         view.updateVisualizer(elements);
+    }
+
+    public void initializeSignals() {
+        sort.isTimelineCompleteProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue) {
+                view.reset();
+                sort.setTimelineComplete(false);
+            }
+        });
+
+        sort.isNewKeyFrameCreatedProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue) {
+                view.updateVisualizer(sort.getKeyFrameArr());
+                sort.setNewKeyFrameCreated(false);
+            }
+        });
     }
 
     public static void main(String[] args) {
