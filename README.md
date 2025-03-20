@@ -6,7 +6,7 @@ This is an application that visually displays how different sorting algorithms w
 ## Project Metadata
 **Author:** Emily <br>
 **Date Created:** March 16, 2025 <br>
-**Last Updated:** March 18, 2025 <br>
+**Last Updated:** March 19, 2025 <br>
 
 ## Requirements
 * Java 23
@@ -37,8 +37,8 @@ This is an application that visually displays how different sorting algorithms w
 3. **Insertion Sort**
 
 ### Interactive Features
-1. **Generate new list button**: Generates new collection of elements to sort.
-2. **List size choice box**: Selects the size of the collection to sort.
+1. **Generate new list button**: Generates new array of elements to sort.
+2. **List size choice box**: Selects the size of the array to sort.
 3. **Sort type choice box**: Selects the sorting algorithm.
 4. **Sort button**: Initiates sorting process.
 5. **Speed slider**: Adjusts speed of the visualizer.

@@ -18,6 +18,34 @@ public class Sort {
         delay = 0.08;
     }
 
+    public BooleanProperty isTimelineCompleteProperty() {
+        return isTimelineComplete;
+    }
+
+    public BooleanProperty isNewKeyFrameCreatedProperty() {
+        return newKeyFrameCreated;
+    }
+
+    public Element[] getKeyFrameArr() {
+        return keyFrameArr;
+    }
+
+    public void setTimelineComplete(boolean value) {
+        isTimelineComplete.set(value);
+    }
+
+    public void setNewKeyFrameCreated(boolean value) {
+        newKeyFrameCreated.set(value);
+    }
+
+    public void setDelay(double newDelay) {
+        delay = newDelay;
+    }
+
+    /**
+     * Sorts the given array using selection sort.
+     * @param arr array to be sorted.
+     */
     public void selectionSort(Element[] arr) {
         int nextSmallestIndex;
         Element temp;
@@ -28,20 +56,20 @@ public class Sort {
                     nextSmallestIndex = j;
                 }
             }
-            // Swap the elements
             temp = arr[i];
             arr[i] = arr[nextSmallestIndex];
             arr[nextSmallestIndex] = temp;
-
             makeKeyFrame(arr.clone(), i*delay);
         }
-
-        // Play the timeline
         timeline.setCycleCount(1);
         executeAfterTimeline(arr);
         timeline.play();
     }
 
+    /**
+     * Sorts the given array using bubble sort.
+     * @param arr array to be sorted.
+     */
     public void bubbleSort(Element[] arr) {
         int n = arr.length;
         boolean swapped;
@@ -55,7 +83,6 @@ public class Sort {
                     temp = arr[j];
                     arr[j] = arr[j+1];
                     arr[j+1] = temp;
-                    // Add a KeyFrame to display the current state of the array
                     makeKeyFrame(arr.clone(), delayTime);
                     swapped = true;
                 }
@@ -69,6 +96,10 @@ public class Sort {
         timeline.play();
     }
 
+    /**
+     * Sorts the given array using insertion sort.
+     * @param arr array to be sorted.
+     */
     public void insertionSort(Element[] arr) {
         int n = arr.length;
         Element key;
@@ -93,17 +124,40 @@ public class Sort {
         timeline.play();
     }
 
+    /**
+     * Calls the correct sort method based on the given sort type.
+     * @param sortType the type of sorting algorithm that will be used.
+     * @param elements the array of elements to be sorted.
+     */
+    public void startSort(String sortType, Element[] elements){
+        switch (sortType) {
+            case "Selection Sort":
+                selectionSort(elements);
+                break;
+            case "Bubble Sort":
+                bubbleSort(elements);
+                break;
+            case "Insertion Sort":
+                insertionSort(elements);
+        }
+    }
+
+    /**
+     * Handles post-sorting procedures and resets values.
+     * @param arr the sorted array.
+     */
     private void executeAfterTimeline(Element[] arr) {
         timeline.setOnFinished(event -> {
             isTimelineComplete.set(true);
-            for (Element e: arr) {
-                System.out.print(e.getValue() + " ");
-            }
-            System.out.println();
             timeline = new Timeline();
         });
     }
 
+    /**
+     * Makes new key frame in timeline that shows a specific step of the sorting process.
+     * @param arr the array in its current state during the sorting process.
+     * @param delayTime double that controls the timing of key frame in the timeline.
+     */
     private void makeKeyFrame(Element[] arr, double delayTime){
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(delayTime), event -> {
             keyFrameArr = arr;
@@ -111,41 +165,26 @@ public class Sort {
         }));
     }
 
+    /**
+     * Cancels the timeline.
+     */
     public void cancel() {
         timeline.stop();
         timeline = new Timeline();
         isTimelineComplete.set(true);
     }
 
+    /**
+     * Pauses the timeline.
+     */
     public void pause(){
         timeline.pause();
     }
 
+    /**
+     * Resumes the timeline.
+     */
     public void play(){
         timeline.play();
-    }
-
-    public void setDelay(double newDelay) {
-        delay = newDelay;
-    }
-
-    public BooleanProperty isTimelineCompleteProperty() {
-        return isTimelineComplete;
-    }
-
-    public BooleanProperty isNewKeyFrameCreatedProperty() {
-        return newKeyFrameCreated;
-    }
-
-    public Element[] getKeyFrameArr() {
-        return keyFrameArr;
-    }
-
-    public void setTimelineComplete(boolean value) {
-        isTimelineComplete.set(value);
-    }
-
-    public void setNewKeyFrameCreated(boolean value) {
-        newKeyFrameCreated.set(value);
     }
 }
