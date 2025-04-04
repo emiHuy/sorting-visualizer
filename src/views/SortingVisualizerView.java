@@ -4,14 +4,17 @@ import components.AlgorithmPane;
 import components.InputPaneBottom;
 import components.InputPaneTop;
 import javafx.scene.layout.Pane;
-import models.Element;
+import models.ElementArray;
 
 public class SortingVisualizerView extends Pane {
     private final InputPaneTop inputPaneTop;
     private final AlgorithmPane algorithmPane;
     private final InputPaneBottom inputPaneBottom;
+    private ElementArray model;
 
-    public SortingVisualizerView() {
+    public SortingVisualizerView(ElementArray model) {
+        this.model = model;
+
         // Create the top input pane
         inputPaneTop = new InputPaneTop();
         inputPaneTop.relocate(109, 40);
@@ -42,30 +45,26 @@ public class SortingVisualizerView extends Pane {
         return inputPaneBottom.getSpeedSlider().getValue();
     }
 
-    /**
-     * Resets state of input components after sorting.
-     */
-    public void reset() {
-        inputPaneTop.setComponentsDisabled(false);
-        inputPaneBottom.getSpeedSlider().setDisable(false);
-        inputPaneBottom.buttonVisibility(false);
+    public void displayCurrentElementOrder() {
+        algorithmPane.update(model.getSorter().getKeyFrameArr());
     }
 
-    /**
-     * Displays the given array of elements; updates the view.
-     * @param elements array of elements to be displayed.
-     */
-    public void displayElements(Element[] elements) {
-        algorithmPane.update(elements);
+    public void displayUnsortedElements() {
+        algorithmPane.update(model.getElements());
     }
 
     /**
      * Update component states for sorting.
      */
-    public void updateInputComponentsForSort() {
-        inputPaneTop.setComponentsDisabled(true);
-        inputPaneBottom.buttonVisibility(true);
-        inputPaneBottom.getPlayButton().setDisable(true);
-        inputPaneBottom.getSpeedSlider().setDisable(true);
+    public void disableInputComponents(boolean v) {
+        inputPaneTop.setComponentsDisabled(v);
+        inputPaneBottom.buttonVisibility(v);
+        inputPaneBottom.getPlayButton().setDisable(v);
+        inputPaneBottom.getSpeedSlider().setDisable(v);
+    }
+
+    public void sortIsPaused(boolean v) {
+        inputPaneBottom.getPlayButton().setDisable(!v);
+        inputPaneBottom.getPauseButton().setDisable(v);
     }
 }

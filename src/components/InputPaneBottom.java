@@ -18,7 +18,7 @@ public class InputPaneBottom extends Pane {
         fastLabel.setPrefSize(35,28);
         fastLabel.setStyle("-fx-font: 15 arial");
 
-        // Create the speed slider to control the visualizer's speed
+        // Create the speed slider to control the visualizer's speed/delay (lower = faster)
         speedSlider = new Slider(0.001,0.3,0.01);
         speedSlider.relocate(40,0);
         speedSlider.setPrefSize(150,28);

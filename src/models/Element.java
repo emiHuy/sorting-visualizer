@@ -31,28 +31,6 @@ public class Element implements Comparable<Element>{
     }
 
     /**
-     * Creates and returns a new, random element.
-     * @param n total number of elements in the array.
-     * @return new random element object.
-     */
-    private static Element generateElement(int n){
-        return new Element((int)(Math.random()*530), 950/n);
-    }
-
-    /**
-     * Creates and returns a new array of a given number of random elements.
-     * @param n total number of elements in the array.
-     * @return array of random elements.
-     */
-    public static Element[] generateNElements(int n) {
-        Element[] elements = new Element[n];
-        for (int i = 0; i < n; i++) {
-            elements[i] = generateElement(n);
-        }
-        return elements;
-    }
-
-    /**
      * Compares two elements.
      * Returns 1 if calling element's value is greater than e's value
      * Returns 0 if calling element's value equals e's value

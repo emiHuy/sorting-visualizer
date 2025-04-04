@@ -6,7 +6,7 @@ This is an application that visually displays how different sorting algorithms w
 ## Project Metadata
 **Author:** Emily <br>
 **Date Created:** March 16, 2025 <br>
-**Last Updated:** March 19, 2025 <br>
+**Last Updated:** April 4, 2025 <br>
 
 ## Requirements
 * Java 23
@@ -19,12 +19,13 @@ This is an application that visually displays how different sorting algorithms w
 
 ### Folders
 #### components/
-- InputPaneTop.java → GUI used for input and user interactions (on top)
-- InputPaneBottom.java → GUI used for input and user interactions (on bottom)
 - AlgorithmPane.java → pane used to visually demonstrate sorting algorithm
+- InputPaneBottom.java → GUI used for input and user interactions (on bottom)
+- InputPaneTop.java → GUI used for input and user interactions (on top)
 
 #### models/
-- Element.java → object to be sorted 
+- Element.java → an individual element in the array 
+- ElementArray.java → collection of element objects
 - Sort.java → contains sorting algorithms
 
 #### views/
@@ -60,4 +61,3 @@ Note that some interactive features will be disabled/not visible during some par
 
 ## Future Enhancements
 - Add more sorting algorithms
-- Add colour to GUI

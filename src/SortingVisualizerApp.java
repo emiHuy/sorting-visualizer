@@ -4,24 +4,18 @@ import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import models.Element;
-import models.Sort;
+import models.ElementArray;
 import views.SortingVisualizerView;
 
-import java.util.Arrays;
-
 public class SortingVisualizerApp extends Application {
-    private static final int DEFAULT_ELEMENT_LIST_SIZE = 50;
     private static final int WINDOW_WIDTH = 1024;
     private static final int WINDOW_HEIGHT = 700;
     SortingVisualizerView view;
-    Element[] elements;
-    Sort sort;
+    ElementArray model;
 
     public SortingVisualizerApp() {
-        view = new SortingVisualizerView();
-        sort = new Sort();
-        elements = Element.generateNElements(DEFAULT_ELEMENT_LIST_SIZE);
+        model = new ElementArray();
+        view = new SortingVisualizerView(model);
         setupSortSignalListeners();
     }
 
@@ -32,7 +26,7 @@ public class SortingVisualizerApp extends Application {
         mainPane.getChildren().add(view);
 
         // Display elements onto view
-        view.displayElements(elements);
+        view.displayUnsortedElements();
 
         // Add event handling to top input pane components
         view.getInputPaneTop().getGenerateListButton().setOnAction(this::handleGenerateOrUpdate);
@@ -55,10 +49,10 @@ public class SortingVisualizerApp extends Application {
      * Sets up listeners that take signals from the Sort class whenever the declared properties are updated
      */
     private void setupSortSignalListeners() {
-        sort.isTimelineCompleteProperty().addListener((obs, oldValue, newValue) -> {
+        model.getSorter().isTimelineCompleteProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) resetViewAfterSort();
         });
-        sort.isNewKeyFrameCreatedProperty().addListener((obs, oldValue, newValue) -> {
+        model.getSorter().isNewKeyFrameCreatedProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) updateViewWithKeyFrame();
         });
     }
@@ -67,16 +61,16 @@ public class SortingVisualizerApp extends Application {
      * Resets the view after sorting.
      */
     private void resetViewAfterSort() {
-        view.reset();
-        sort.setTimelineComplete(false);
+        view.disableInputComponents(false);
+        model.getSorter().setTimelineComplete(false);
     }
 
     /**
      * Updates the view to show a new key frame.
      */
     private void updateViewWithKeyFrame() {
-        view.displayElements(sort.getKeyFrameArr());
-        sort.setNewKeyFrameCreated(false);
+        view.displayCurrentElementOrder();
+        model.getSorter().setNewKeyFrameCreated(false);
     }
 
     /**
@@ -84,8 +78,8 @@ public class SortingVisualizerApp extends Application {
      * @param actionEvent event triggered by selecting a new list size or by clicking the generate new list button.
      */
     private void handleGenerateOrUpdate(ActionEvent actionEvent) {
-        elements = Element.generateNElements(view.getInputPaneTop().getSizeChoiceBox().getValue());
-        view.displayElements(elements);
+        model.generateNElements(view.getInputPaneTop().getSizeChoiceBox().getValue());
+        view.displayUnsortedElements();
     }
 
     /**
@@ -93,9 +87,8 @@ public class SortingVisualizerApp extends Application {
      * @param actionEvent event triggered by clicking the sort button.
      */
     private void handleSortButton(ActionEvent actionEvent) {
-        view.updateInputComponentsForSort();
-        sort.setDelay(view.getSortSpeed());
-        sort.startSort(view.getSortType(), Arrays.copyOf(elements, elements.length));
+        view.disableInputComponents(true);
+        model.sort(view.getSortType(), view.getSortSpeed());
     }
 
     /**
@@ -103,7 +96,7 @@ public class SortingVisualizerApp extends Application {
      * @param event event triggered by selecting a sorting algorithm in the choice box.
      */
     private void handleSortChoiceBox(Event event) {
-        view.displayElements(elements);
+        view.displayUnsortedElements();
     }
 
     /**
@@ -111,9 +104,8 @@ public class SortingVisualizerApp extends Application {
      * @param actionEvent event triggered by clicking the pause button.
      */
     private void handlePauseButton(ActionEvent actionEvent) {
-        sort.pause();
-        view.getInputPaneBottom().getPlayButton().setDisable(false);
-        view.getInputPaneBottom().getPauseButton().setDisable(true);
+        model.getSorter().pause();
+        view.sortIsPaused(true);
     }
 
     /**
@@ -121,9 +113,8 @@ public class SortingVisualizerApp extends Application {
      * @param actionEvent event triggered by clicking the play button.
      */
     private void handlePlayButton(ActionEvent actionEvent) {
-        sort.play();
-        view.getInputPaneBottom().getPlayButton().setDisable(true);
-        view.getInputPaneBottom().getPauseButton().setDisable(false);
+        model.getSorter().play();
+        view.sortIsPaused(false);
     }
 
     /**
@@ -131,8 +122,9 @@ public class SortingVisualizerApp extends Application {
      * @param actionEvent event triggered by clicking the stop button.
      */
     private void handleStopButton(ActionEvent actionEvent) {
-        sort.cancel();
-        view.displayElements(elements);
+        model.getSorter().cancel();
+        view.displayUnsortedElements();
+        view.sortIsPaused(false);
     }
 
     // Main entry point

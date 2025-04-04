@@ -1,5 +1,6 @@
 package models;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -139,18 +140,8 @@ public class Sort {
                 break;
             case "Insertion Sort":
                 insertionSort(elements);
+                break;
         }
-    }
-
-    /**
-     * Handles post-sorting procedures and resets values.
-     * @param arr the sorted array.
-     */
-    private void executeAfterTimeline(Element[] arr) {
-        timeline.setOnFinished(event -> {
-            isTimelineComplete.set(true);
-            timeline = new Timeline();
-        });
     }
 
     /**
@@ -163,6 +154,17 @@ public class Sort {
             keyFrameArr = arr;
             setNewKeyFrameCreated(true);
         }));
+    }
+
+    /**
+     * Handles post-sorting procedures and resets values.
+     * @param arr the sorted array.
+     */
+    private void executeAfterTimeline(Element[] arr) {
+        timeline.setOnFinished(event -> {
+            isTimelineComplete.set(true);
+            timeline = new Timeline();
+        });
     }
 
     /**
