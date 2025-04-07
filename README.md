@@ -6,7 +6,7 @@ This is an application that visually displays how different sorting algorithms w
 ## Project Metadata
 **Author:** Emily <br>
 **Date Created:** March 16, 2025 <br>
-**Last Updated:** April 4, 2025 <br>
+**Last Updated:** April 7, 2025 <br>
 
 ## Requirements
 * Java 23
@@ -15,7 +15,7 @@ This is an application that visually displays how different sorting algorithms w
 
 ## File and Folder Information
 ### Main Entry Point
-- SortingVisualizerApp → entry point and main controller
+- SortingVisualizerApp.java → entry point and main controller
 
 ### Folders
 #### components/
