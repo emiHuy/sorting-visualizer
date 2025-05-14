@@ -19,17 +19,17 @@ This is an application that visually displays how different sorting algorithms w
 
 ### Folders
 #### components/
-- AlgorithmPane.java → pane used to visually demonstrate sorting algorithm
-- InputPaneBottom.java → GUI used for input and user interactions (on bottom)
-- InputPaneTop.java → GUI used for input and user interactions (on top)
+- `AlgorithmPane.java` → pane used to visually demonstrate sorting algorithm
+- `InputPaneBottom.java` → GUI used for input and user interactions (on bottom)
+- `InputPaneTop.java` → GUI used for input and user interactions (on top)
 
 #### models/
-- Element.java → an individual element in the array 
-- ElementArray.java → collection of element objects
-- Sort.java → contains sorting algorithms
+- `Element.java` → an individual element in the array 
+- `ElementArray.java` → collection of element objects
+- `Sort.java` → contains sorting algorithms
 
 #### views/
-- SortingVisualizerView.java → arranges different parts of UI
+- `SortingVisualizerView.java` → arranges different parts of UI
 
 ## Features
 ### Sorting Algorithms Implemented
